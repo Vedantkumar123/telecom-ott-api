@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\Vedant_Official\Vedant_projects_and_work\Mini_capstone\telecom-ott-api\venv
+set VIRTUAL_ENV=C:\Users\Administrator\Desktop\Vedant_Kumar\mini_cap\telecom-ott-api\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
