@@ -3,9 +3,15 @@ from app.repositories.plan_repository import get_plan_by_id
 from app.repositories.content_repository import get_content_by_id
 from app.repositories.access_log_repository import *
 from fastapi import HTTPException
+from bson import ObjectId
 
 def access_content(user_id, content_id):
     try:
+        try:
+            ObjectId(content_id)
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid content_id format. Must be a valid MongoDB ObjectId")
+
         sub = get_active_subscription(user_id)
 
         if not sub:
@@ -13,6 +19,12 @@ def access_content(user_id, content_id):
 
         plan = get_plan_by_id(sub["plan_id"])
         content = get_content_by_id(content_id)
+
+        if not plan:
+            raise HTTPException(status_code=404, detail="Plan not found for active subscription")
+
+        if not content:
+            raise HTTPException(status_code=404, detail="Content not found")
 
         if content["platform"] not in plan["included_apps"]:
             raise HTTPException(status_code=403, detail="Content not allowed in your plan")
